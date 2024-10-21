@@ -1,0 +1,57 @@
+version: '3'
+
+services:
+
+  jupyter-pyspark:
+    image: jupyter/pyspark-notebook:x86_64-ubuntu-22.04
+    hostname: pyspark-host
+    user: root
+    container_name: pyspark
+    restart: always
+    ports:
+      - 8888:8888
+      - 4042:4041
+    volumes:
+      - jupyter-pyspark:/home/jovyan/pyspark
+    environment:
+      JUPYTER_PORT: 8888
+      SPARK_UI_PORT: 4042
+      GRANT_SUDO: yes 
+
+  postgres-server:
+    image: postgres:13.16-bookworm
+    container_name: postgres
+    hostname: postgres-db
+    ports: 
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: P@ssw0rd
+
+    networks:
+      - mynet
+    volumes:
+      - postgres-db:/usr/local/database    
+
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    hostname: pgadmin
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "Hazemomar@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "P@ssw0rd"
+
+    restart: always
+    ports:
+      - "5050:80"
+
+
+
+volumes:
+  jupyter-pyspark:
+  postgres-db:
+
+networks:
+  mynet:
+    driver: bridge
