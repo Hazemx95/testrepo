@@ -1,3 +1,3 @@
 *.tar
-./Queries/
+./Queries/init.sql
 *.py
